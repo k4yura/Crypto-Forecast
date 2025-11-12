@@ -1,0 +1,23 @@
+import pandas as pd
+from statsmodels.tsa.arima.model import ARIMA
+
+class ARIMAModel:
+    """
+    ARIMA wrapper: fits ARIMA(p,d,q) and forecasts.
+    """
+    def __init__(self, p=1, d=1, q=0):
+        self.p = p
+        self.d = d
+        self.q = q
+        self.model = None
+        self.fitted_model = None
+
+    def fit(self, series):
+        self.model = ARIMA(series, order=(self.p, self.d, self.q))
+        self.fitted_model = self.model.fit()
+        return self.fitted_model
+
+    def forecast(self, steps=1):
+        if self.fitted_model is None:
+            raise ValueError("Fit the model first")
+        return self.fitted_model.forecast(steps=steps)
